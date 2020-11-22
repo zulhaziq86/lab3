@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+int main(void){
+	int pipefds[2];		char num[NUM_LENGTH + 1];
+		char buffer[NUM_LENGTH + 1];
+	
+		pipe(pipefds);
+
+		pid_t pid = fork();
+
+		if(pid == 0){
+			getNUM(num);
+			close(pipefds[0]);
+			write(pipefds[1], num, NUM_LENGTH + 1);
+	
+			printf("Enter your number: ", );
+			sleep(NUM_WAIT_INTERVAL);
+			printf("%s\n", );
+			sleep(NUM_WAIT_INTERVAL);
+			exit(EXIT_SUCCESS);
+	}
+
+	if(pid > 0){
+		wait(NULL);
+
+		close(pipefds[1]);
+		read(pipefds[0], buffer, NUM_LENGTH + 1);
+		close(pipefds[0]);
+		printf("'%s' is a prime number.\n\n", buffer);
+	}
+	}
+
+	return EXIT_SUCCESS;
+}
